@@ -1,0 +1,251 @@
+/* Übe-Timer – Look angelehnt an den klassischen Time Timer */
+
+:root {
+    --bg: #ecebe6;
+    --panel: #ffffff;
+    --ink: #1d1d1f;
+    --muted: #6b6b70;
+    --line: #dddcd6;
+    --red: #d8262c;
+    --red-dark: #b01c21;
+    --housing: #f8f7f3;
+    --face: #ffffff;
+    --field: #f6f5f1;
+}
+
+@media (prefers-color-scheme: dark) {
+    :root {
+        --bg: #1b1b1d;
+        --panel: #26262a;
+        --ink: #f2f2f0;
+        --muted: #a0a0a6;
+        --line: #3a3a40;
+        --field: #1f1f22;
+    }
+}
+
+* { box-sizing: border-box; }
+
+body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--ink);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.4;
+}
+
+[hidden] { display: none !important; }
+
+/* ---------- Kopfzeile ---------- */
+.topbar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 12px 16px;
+    background: var(--ink);
+    color: var(--bg);
+}
+.topbar a { color: inherit; opacity: .75; text-decoration: none; font-size: .9rem; }
+.topbar a:hover { opacity: 1; }
+.topbar h1 { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; }
+
+.screen { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
+
+.panel {
+    background: var(--panel);
+    border-radius: 18px;
+    padding: 24px;
+    box-shadow: 0 8px 30px rgba(0, 0, 0, .08);
+}
+.panel h2 { margin: 0 0 4px; }
+.hint { color: var(--muted); font-size: .9rem; margin: 4px 0 16px; }
+.center { text-align: center; }
+
+/* ---------- Buttons ---------- */
+.btn {
+    font: inherit;
+    font-weight: 600;
+    border: 2px solid var(--ink);
+    background: transparent;
+    color: var(--ink);
+    padding: 10px 18px;
+    border-radius: 999px;
+    cursor: pointer;
+    transition: transform .08s, background .15s;
+}
+.btn:active { transform: scale(.97); }
+.btn-primary { background: var(--red); border-color: var(--red); color: #fff; }
+.btn-primary:hover { background: var(--red-dark); border-color: var(--red-dark); }
+.btn-primary:disabled { opacity: .4; cursor: not-allowed; }
+.btn-ghost { border-style: dashed; border-color: var(--line); color: var(--muted); }
+.btn-ghost:hover { border-color: var(--ink); color: var(--ink); }
+.btn-big { width: 100%; padding: 16px; font-size: 1.15rem; margin-top: 20px; }
+
+.icon {
+    width: 32px; height: 32px;
+    border: none; border-radius: 8px;
+    background: transparent; color: var(--muted);
+    font-size: 1rem; cursor: pointer;
+}
+.icon:hover { background: var(--field); color: var(--ink); }
+.icon.del:hover { color: var(--red); }
+.icon:disabled { visibility: hidden; }
+
+/* ---------- Programmliste ---------- */
+.plan { list-style: none; margin: 0 0 12px; padding: 0; counter-reset: item; }
+.plan-item {
+    display: grid;
+    grid-template-columns: 44px 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--line);
+}
+.plan-item input {
+    font: inherit;
+    color: var(--ink);
+    background: var(--field);
+    border: 1px solid transparent;
+    border-radius: 8px;
+    padding: 8px 10px;
+    min-width: 0;
+}
+.plan-item input:focus { outline: none; border-color: var(--red); }
+.duration { display: flex; align-items: center; gap: 4px; color: var(--muted); font-size: .85rem; }
+.duration input { width: 58px; text-align: right; }
+.item-actions { display: flex; }
+
+.plan-footer {
+    display: flex; flex-wrap: wrap; gap: 8px 16px;
+    justify-content: space-between; align-items: center;
+    margin-top: 16px;
+}
+.plan-total { font-weight: 600; }
+.toggle { color: var(--muted); font-size: .9rem; cursor: pointer; }
+.toggle input { accent-color: var(--red); }
+
+@media (max-width: 560px) {
+    .plan-item { grid-template-columns: 44px 1fr auto; }
+    .plan-item .topic { grid-column: 2 / 4; }
+    .plan-item .duration { grid-column: 2; }
+    .plan-item .item-actions { grid-column: 3; }
+    .plan-item .dial.mini { grid-row: 1 / 3; }
+}
+
+/* ---------- Die Uhr (Time Timer) ---------- */
+.housing {
+    width: min(78vw, 420px);
+    margin: 8px auto 0;
+    padding: 5%;
+    border-radius: 14%;
+    background: linear-gradient(160deg, #ffffff, var(--housing) 60%, #e6e4dd);
+    box-shadow:
+        0 24px 50px rgba(0, 0, 0, .18),
+        inset 0 -6px 0 rgba(0, 0, 0, .05),
+        inset 0 2px 0 rgba(255, 255, 255, .9);
+}
+
+.dial {
+    --sweep: 0deg;       /* Winkel der roten Scheibe = verbleibende Zeit */
+    --minor: 6deg;       /* Abstand kleine Striche */
+    --major: 30deg;      /* Abstand grosse Striche */
+    position: relative;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    background: var(--face);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, .12);
+    container-type: inline-size;
+    color: #1d1d1f;
+}
+
+/* rote Scheibe: läuft von oben gegen den Uhrzeigersinn ab */
+.dial .disc {
+    position: absolute;
+    inset: 15%;
+    border-radius: 50%;
+    background: conic-gradient(transparent 0 calc(360deg - var(--sweep)), var(--red) 0);
+}
+
+/* Skala: kleine und grosse Striche als Ring */
+.dial .ticks,
+.dial .ticks::before,
+.dial .ticks::after { position: absolute; inset: 0; border-radius: 50%; }
+.dial .ticks::before {
+    content: "";
+    background: repeating-conic-gradient(from -.4deg, #1d1d1f 0 .8deg, transparent .8deg var(--minor));
+    -webkit-mask: radial-gradient(circle closest-side, transparent 0 70.5%, #000 71% 76%, transparent 76.5%);
+            mask: radial-gradient(circle closest-side, transparent 0 70.5%, #000 71% 76%, transparent 76.5%);
+}
+.dial .ticks::after {
+    content: "";
+    background: repeating-conic-gradient(from -.9deg, #1d1d1f 0 1.8deg, transparent 1.8deg var(--major));
+    -webkit-mask: radial-gradient(circle closest-side, transparent 0 70.5%, #000 71% 79%, transparent 79.5%);
+            mask: radial-gradient(circle closest-side, transparent 0 70.5%, #000 71% 79%, transparent 79.5%);
+}
+
+.dial .numbers span {
+    position: absolute;
+    left: 50%; top: 50%;
+    font-size: 6.5cqw;
+    font-weight: 700;
+    transform: translate(-50%, -50%) rotate(var(--a)) translateY(-44cqw) rotate(calc(-1 * var(--a)));
+}
+
+/* Knopf in der Mitte */
+.dial .knob {
+    position: absolute;
+    inset: 42%;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 30%, #ffffff, #d9d8d2 55%, #a9a8a2);
+    box-shadow: 0 3px 6px rgba(0, 0, 0, .3);
+}
+
+.dial.mini { width: 44px; box-shadow: inset 0 0 0 1px var(--line); }
+.dial.mini .disc { inset: 8%; }
+.dial.mini .ticks { display: none; }
+.dial.mini .knob { inset: 38%; box-shadow: 0 1px 2px rgba(0, 0, 0, .3); }
+
+/* ---------- Laufender Timer ---------- */
+.progress { display: flex; gap: 4px; height: 8px; margin-bottom: 16px; }
+.progress span { border-radius: 4px; background: var(--line); overflow: hidden; }
+.progress span i { display: block; height: 100%; background: var(--red); width: 0; }
+
+.run-count { text-align: center; color: var(--muted); margin: 0; font-size: .95rem; }
+.run-topic { text-align: center; font-size: clamp(1.5rem, 5vw, 2.2rem); margin: 4px 0 20px; overflow-wrap: anywhere; }
+.run-time {
+    text-align: center;
+    font-size: clamp(2.5rem, 10vw, 3.5rem);
+    font-weight: 700;
+    font-variant-numeric: tabular-nums;
+    margin-top: 24px;
+}
+.run.paused .run-time,
+#run.paused .run-time { animation: blink 1.2s steps(2) infinite; color: var(--muted); }
+@keyframes blink { 50% { opacity: .35; } }
+.run-next { text-align: center; color: var(--muted); margin: 4px 0 20px; }
+
+.controls { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 16px; }
+
+/* ---------- Journal ---------- */
+.done-summary { font-size: 1.05rem; margin: 4px 0 16px; }
+.journal { list-style: none; margin: 0 0 20px; padding: 0; }
+.journal li { padding: 12px 0; border-bottom: 1px solid var(--line); }
+.journal .row { display: flex; gap: 10px; align-items: baseline; flex-wrap: wrap; }
+.journal .j-topic { font-weight: 700; flex: 1; }
+.journal .j-meta { color: var(--muted); font-size: .88rem; font-variant-numeric: tabular-nums; }
+.badge { font-size: .75rem; font-weight: 700; padding: 2px 8px; border-radius: 999px; background: var(--field); color: var(--muted); }
+.badge.ok { background: var(--red); color: #fff; }
+.journal textarea { margin-top: 8px; }
+
+textarea {
+    width: 100%;
+    font: inherit;
+    color: var(--ink);
+    background: var(--field);
+    border: 1px solid transparent;
+    border-radius: 10px;
+    padding: 10px;
+    resize: vertical;
+}
+textarea:focus { outline: none; border-color: var(--red); }
+.notes-label { display: block; font-weight: 600; margin-bottom: 6px; }

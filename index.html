@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="de">
+    <head>
+        <meta charset="utf-8">
+        <title>Übe-Timer</title>
+        <meta name="description" content="Multi-Timer für Übeprogramme mit Journal">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <meta name="author" content="marcscheidegger.ch">
+        <link rel="stylesheet" href="uebe.css?v=1">
+    </head>
+    <body>
+        <header class="topbar">
+            <a href="https://marcscheidegger.ch">marcscheidegger.ch</a>
+            <h1>Übe-Timer</h1>
+        </header>
+
+        <!-- 1. Übeprogramm zusammenstellen -->
+        <main id="setup" class="screen">
+            <section class="panel">
+                <h2>Dein Übeprogramm</h2>
+                <p class="hint">Füge Timer hinzu, gib jedem ein Thema und eine Dauer. Beim Start laufen sie nacheinander ab.</p>
+                <ol id="planList" class="plan"></ol>
+                <button id="addBtn" class="btn btn-ghost" type="button">＋ Timer hinzufügen</button>
+                <div class="plan-footer">
+                    <div id="planTotal" class="plan-total"></div>
+                    <label class="toggle"><input type="checkbox" id="soundToggle" checked> Signalton am Ende jeder Übung</label>
+                </div>
+                <button id="startBtn" class="btn btn-primary btn-big" type="button">▶ Übeprogramm starten</button>
+            </section>
+        </main>
+
+        <!-- 2. Programm läuft -->
+        <main id="run" class="screen" hidden>
+            <div id="runProgress" class="progress"></div>
+            <p id="runCount" class="run-count"></p>
+            <h2 id="runTopic" class="run-topic"></h2>
+
+            <div class="housing">
+                <div id="bigDial" class="dial">
+                    <div class="numbers"></div>
+                    <div class="ticks"></div>
+                    <div class="disc"></div>
+                    <div class="knob"></div>
+                </div>
+            </div>
+
+            <div id="runTime" class="run-time">00:00</div>
+            <p id="runNext" class="run-next"></p>
+
+            <div class="controls">
+                <button id="pauseBtn" class="btn btn-primary" type="button">❚❚ Pause</button>
+                <button id="plusBtn" class="btn" type="button">＋1 Min</button>
+                <button id="skipBtn" class="btn" type="button">Überspringen ⏭</button>
+                <button id="stopBtn" class="btn btn-ghost" type="button">Beenden</button>
+            </div>
+            <p class="hint center">Leertaste = Pause / Weiter</p>
+        </main>
+
+        <!-- 3. Journal -->
+        <main id="done" class="screen" hidden>
+            <section class="panel">
+                <h2>Geschafft! 🎉</h2>
+                <p id="doneSummary" class="done-summary"></p>
+                <ol id="doneList" class="journal"></ol>
+                <label class="notes-label" for="generalNotes">Allgemeine Notizen zur Übesession</label>
+                <textarea id="generalNotes" rows="4" placeholder="Wie lief es? Was nimmst du dir fürs nächste Mal vor?"></textarea>
+                <div class="controls">
+                    <button id="downloadBtn" class="btn btn-primary" type="button">⬇ Journal herunterladen</button>
+                    <button id="backBtn" class="btn btn-ghost" type="button">Zurück zum Programm</button>
+                </div>
+            </section>
+        </main>
+
+        <template id="planItemTpl">
+            <li class="plan-item">
+                <div class="dial mini"><div class="ticks"></div><div class="disc"></div><div class="knob"></div></div>
+                <input class="topic" type="text" placeholder="Thema, z.B. Tonleitern" maxlength="80">
+                <div class="duration">
+                    <input class="min" type="number" min="0" max="600" inputmode="numeric" aria-label="Minuten"><span>min</span>
+                    <input class="sec" type="number" min="0" max="59" step="5" inputmode="numeric" aria-label="Sekunden"><span>s</span>
+                </div>
+                <div class="item-actions">
+                    <button class="icon up" type="button" title="Nach oben">↑</button>
+                    <button class="icon down" type="button" title="Nach unten">↓</button>
+                    <button class="icon del" type="button" title="Entfernen">✕</button>
+                </div>
+            </li>
+        </template>
+
+        <script src="uebe.js?v=1"></script>
+    </body>
+</html>
