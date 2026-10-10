@@ -87,6 +87,70 @@ function savePlan() {
     try { localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); } catch (e) { /* egal */ }
 }
 
+// ---------- Farben ----------
+// Eine feste Farbe für alle Übungen oder "gemischt": jede Übung bekommt zufällig
+// eine der hellen Farben, nie zweimal dieselbe hintereinander.
+
+const COLORS = {
+    rot: '#d8262c',
+    gruen: '#5cc96b',
+    hellblau: '#4fb6ea',
+    orange: '#f5922f',
+    gelb: '#f7c925',
+};
+const MIX = ['gruen', 'hellblau', 'orange', 'gelb'];
+const COLOR_KEY = 'uebetimer.farbe.v1';
+
+let colorMode = 'rot';
+let mixSeq = [];
+try {
+    const saved = localStorage.getItem(COLOR_KEY);
+    if (saved in COLORS || saved === 'gemischt') colorMode = saved;
+} catch (e) { /* egal */ }
+
+// Farbe für die Übung an Position i
+function colorAt(i) {
+    if (colorMode !== 'gemischt') return COLORS[colorMode];
+    while (mixSeq.length <= i) {
+        const prev = mixSeq[mixSeq.length - 1];
+        const options = MIX.filter((c) => c !== prev);
+        mixSeq.push(options[Math.floor(Math.random() * options.length)]);
+    }
+    return COLORS[mixSeq[i]];
+}
+
+// Buttons und Akzente in der Timerfarbe; Text dunkel auf hellen Farben
+function setAccent(hex) {
+    const root = document.documentElement.style;
+    if (!hex) {
+        // "gemischt": neutrale Buttons in Schriftfarbe
+        root.setProperty('--accent', 'var(--ink)');
+        root.setProperty('--accent-ink', 'var(--bg)');
+        return;
+    }
+    const n = parseInt(hex.slice(1), 16);
+    const light = 0.299 * (n >> 16) + 0.587 * ((n >> 8) & 255) + 0.114 * (n & 255) > 140;
+    root.setProperty('--accent', hex);
+    root.setProperty('--accent-ink', light ? '#1d1d1f' : '#ffffff');
+}
+
+function applyColorMode() {
+    for (const b of document.querySelectorAll('.swatch')) {
+        b.setAttribute('aria-pressed', String(b.dataset.color === colorMode));
+    }
+    setAccent(colorMode === 'gemischt' ? null : COLORS[colorMode]);
+}
+
+for (const b of document.querySelectorAll('.swatch')) {
+    b.addEventListener('click', () => {
+        colorMode = b.dataset.color;
+        mixSeq = []; // bei jedem Klick auf "gemischt" neu würfeln
+        try { localStorage.setItem(COLOR_KEY, colorMode); } catch (e) { /* egal */ }
+        applyColorMode();
+        renderPlan();
+    });
+}
+
 function renderPlan(focusId) {
     const list = $('#planList');
     const tpl = $('#planItemTpl');
@@ -102,6 +166,7 @@ function renderPlan(focusId) {
         topic.value = item.topic;
         min.value = Math.floor(item.sec / 60);
         sec.value = item.sec % 60;
+        dial.style.setProperty('--disc', colorAt(i));
 
         const updateDial = () => {
             const sc = scaleFor(item.sec);
@@ -224,7 +289,8 @@ let session = null;
 let loopId = null;
 
 function startProgram() {
-    const items = plan.filter((p) => p.sec > 0);
+    // Farbe nach Position in der Liste, so wie bei den kleinen Uhren
+    const items = plan.map((p, i) => ({ ...p, color: colorAt(i) })).filter((p) => p.sec > 0);
     if (!items.length) return;
     ensureAudio();
 
@@ -239,6 +305,7 @@ function startProgram() {
         items: items.map((p) => ({
             topic: p.topic.trim() || 'Ohne Thema',
             planned: p.sec,
+            color: p.color,
             actual: 0,
             start: null,
             end: null,
@@ -262,6 +329,8 @@ function beginItem(i, startMs) {
     const item = session.items[i];
     item.start = new Date(startMs);
     item.status = 'läuft';
+    bigDial.style.setProperty('--disc', item.color);
+    setAccent(item.color);
     rebuildScale();
     renderRun();
 }
@@ -332,6 +401,7 @@ function buildProgress() {
         const span = document.createElement('span');
         span.style.flex = String(it.planned);
         span.title = it.topic;
+        span.style.setProperty('--disc', it.color);
         span.append(document.createElement('i'));
         bar.append(span);
     }
@@ -386,6 +456,7 @@ function finishProgram() {
     session.endedAt = new Date();
     releaseWakeLock();
     document.title = 'Übe-Timer';
+    applyColorMode();
     renderJournal();
     show('done');
 }
@@ -513,4 +584,5 @@ $('#backBtn').addEventListener('click', () => {
 
 // ---------- Start ----------
 
+applyColorMode();
 renderPlan();

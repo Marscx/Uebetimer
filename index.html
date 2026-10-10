@@ -6,7 +6,7 @@
         <meta name="description" content="Multi-Timer für Übeprogramme mit Journal">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="marcscheidegger.ch">
-        <link rel="stylesheet" href="uebe.css?v=1">
+        <link rel="stylesheet" href="uebe.css?v=2">
     </head>
     <body>
         <header class="topbar">
@@ -19,6 +19,15 @@
             <section class="panel">
                 <h2>Dein Übeprogramm</h2>
                 <p class="hint">Füge Timer hinzu, gib jedem ein Thema und eine Dauer. Beim Start laufen sie nacheinander ab.</p>
+                <div class="colors">
+                    <span class="label">Farbe</span>
+                    <button class="swatch" type="button" data-color="rot" title="Rot" style="--c: #d8262c"></button>
+                    <button class="swatch" type="button" data-color="gruen" title="Grün" style="--c: #5cc96b"></button>
+                    <button class="swatch" type="button" data-color="hellblau" title="Hellblau" style="--c: #4fb6ea"></button>
+                    <button class="swatch" type="button" data-color="orange" title="Orange" style="--c: #f5922f"></button>
+                    <button class="swatch" type="button" data-color="gelb" title="Gelb" style="--c: #f7c925"></button>
+                    <button class="swatch mix" type="button" data-color="gemischt" title="Gemischt (zufällig)"></button>
+                </div>
                 <ol id="planList" class="plan"></ol>
                 <button id="addBtn" class="btn btn-ghost" type="button">＋ Timer hinzufügen</button>
                 <div class="plan-footer">
@@ -87,6 +96,6 @@
             </li>
         </template>
 
-        <script src="uebe.js?v=1"></script>
+        <script src="uebe.js?v=2"></script>
     </body>
 </html>
