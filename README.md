@@ -1,6 +1,6 @@
 # Übe-Timer
 
-Multi-Timer für Übeprogramme im Look des Time Timers.
+Multi-Timer für Übeprogramme: visueller Timer mit schrumpfender Farbscheibe.
 
 - Timer hinzufügen, Thema und Dauer (Minuten/Sekunden) einstellen, Reihenfolge ändern
 - Beim Start laufen die Timer nacheinander ab, mit Gong am Ende jeder Übung

@@ -27,7 +27,7 @@ function show(id) {
 }
 
 // ---------- Skala der Uhr ----------
-// Wie beim echten Time Timer gibt es verschiedene Skalen (5, 20, 60, 120 Min ...).
+// Die Skala passt sich der Dauer an (5, 10, 20, 30, 60, 120 Min ...).
 // Gewählt wird die kleinste, in die die Dauer passt.
 
 const SCALES = [

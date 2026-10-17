@@ -1,4 +1,4 @@
-/* Übe-Timer – Look angelehnt an den klassischen Time Timer */
+/* Übe-Timer – visueller Timer mit schrumpfender Farbscheibe */
 
 :root {
     --bg: #ecebe6;
@@ -168,7 +168,7 @@ body {
 .swatch[aria-pressed="true"] { box-shadow: 0 0 0 2px var(--ink); }
 .swatch:hover { transform: scale(1.08); }
 
-/* ---------- Die Uhr (Time Timer) ---------- */
+/* ---------- Die Uhr ---------- */
 .housing {
     width: min(78vw, 420px);
     margin: 8px auto 0;
