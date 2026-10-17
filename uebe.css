@@ -25,6 +25,18 @@
     }
 }
 
+/* ?embed: im iFrame immer hell, damit Text auf jeder Seite lesbar bleibt */
+:root.embed {
+    --bg: transparent;
+    --panel: #ffffff;
+    --ink: #1d1d1f;
+    --muted: #6b6b70;
+    --line: #dddcd6;
+    --field: #f6f5f1;
+}
+.embed .topbar { display: none; }
+.embed .screen { padding-top: 8px; }
+
 * { box-sizing: border-box; }
 
 body {

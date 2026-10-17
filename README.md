@@ -12,3 +12,11 @@ Multi-Timer für Übeprogramme im Look des Time Timers.
 
 Reines HTML/CSS/JS, keine Abhängigkeiten. Bei Änderungen an `uebe.js` / `uebe.css`
 die Versionsnummer `?v=N` in `index.html` erhöhen.
+
+## Einbetten (z.B. WordPress)
+
+Mit `?embed` erscheint der Timer ohne Kopfzeile, mit transparentem Hintergrund und immer hell:
+
+```html
+<iframe src="https://uebetimer.marcscheidegger.ch/?embed" title="Übe-Timer" allow="screen-wake-lock; autoplay" loading="lazy" style="width:100%;height:950px;border:0;"></iframe>
+```

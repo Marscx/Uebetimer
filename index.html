@@ -6,7 +6,11 @@
         <meta name="description" content="Multi-Timer für Übeprogramme mit Journal">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="marcscheidegger.ch">
-        <link rel="stylesheet" href="uebe.css?v=2">
+        <link rel="stylesheet" href="uebe.css?v=3">
+        <script>
+            // ?embed: Ansicht für iFrames (ohne Kopfzeile, transparenter Hintergrund)
+            if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('embed');
+        </script>
     </head>
     <body>
         <header class="topbar">
@@ -96,6 +100,6 @@
             </li>
         </template>
 
-        <script src="uebe.js?v=2"></script>
+        <script src="uebe.js?v=3"></script>
     </body>
 </html>

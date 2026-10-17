@@ -125,7 +125,7 @@ function setAccent(hex) {
     if (!hex) {
         // "gemischt": neutrale Buttons in Schriftfarbe
         root.setProperty('--accent', 'var(--ink)');
-        root.setProperty('--accent-ink', 'var(--bg)');
+        root.setProperty('--accent-ink', 'var(--panel)');
         return;
     }
     const n = parseInt(hex.slice(1), 16);
