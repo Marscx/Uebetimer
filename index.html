@@ -6,7 +6,7 @@
         <meta name="description" content="Multi-Timer für Übeprogramme mit Journal">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="marcscheidegger.ch">
-        <link rel="stylesheet" href="uebe.css?v=3">
+        <link rel="stylesheet" href="uebe.css?v=4">
         <script>
             // ?embed: Ansicht für iFrames (ohne Kopfzeile, transparenter Hintergrund)
             if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('embed');
@@ -83,6 +83,13 @@
                 </div>
             </section>
         </main>
+
+        <!-- Nachweis, nur in der eingebetteten Ansicht (?embed) sichtbar -->
+        <footer class="credit">
+            Übe-Timer von <a href="https://marcscheidegger.ch" target="_blank" rel="noopener">Marc Scheidegger</a>,
+            entwickelt mit Claude (Anthropic) ·
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a>
+        </footer>
 
         <template id="planItemTpl">
             <li class="plan-item">

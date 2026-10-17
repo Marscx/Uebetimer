@@ -20,3 +20,8 @@ Mit `?embed` erscheint der Timer ohne Kopfzeile, mit transparentem Hintergrund u
 ```html
 <iframe src="https://uebetimer.marcscheidegger.ch/?embed" title="Übe-Timer" allow="screen-wake-lock; autoplay" loading="lazy" style="width:100%;height:950px;border:0;"></iframe>
 ```
+
+## Lizenz
+
+Übe-Timer von [Marc Scheidegger](https://marcscheidegger.ch), entwickelt mit Claude (Anthropic),
+lizenziert unter [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de).
