@@ -2,24 +2,41 @@
 <html lang="de">
     <head>
         <meta charset="utf-8">
-        <title>Übe-Timer</title>
+        <title>Übe-Timer – Marc Scheidegger</title>
         <meta name="description" content="Multi-Timer für Übeprogramme mit Journal">
         <meta name="viewport" content="width=device-width, initial-scale=1">
         <meta name="author" content="marcscheidegger.ch">
-        <link rel="stylesheet" href="uebe.css?v=5">
+        <link rel="icon" href="favicon.svg" type="image/svg+xml">
+        <meta name="theme-color" content="#0b1220">
+        <link rel="stylesheet" href="marke.css?v=2">
+        <link rel="stylesheet" href="uebe.css?v=7">
         <script>
             // ?embed: Ansicht für iFrames (ohne Kopfzeile, transparenter Hintergrund)
             if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('embed');
         </script>
     </head>
     <body>
-        <header class="topbar">
-            <a href="https://marcscheidegger.ch">marcscheidegger.ch</a>
-            <h1>Übe-Timer</h1>
+        <!-- Gemeinsame Kopfleiste aller Übe-Tools (Aussehen in marke.css) -->
+        <header class="ms-bar">
+            <div class="ms-bar-inner">
+                <a class="ms-brand" href="https://marcscheidegger.ch/">Marc <span>Scheidegger</span></a>
+                <nav aria-label="Übe-Tools">
+                    <ul class="ms-nav">
+                        <li><a href="https://zufall.marcscheidegger.ch/">Würfel</a></li>
+                        <li><a href="https://uebetimer.marcscheidegger.ch/" aria-current="page">Übe-Timer</a></li>
+                        <li><a href="https://caged.marcscheidegger.ch/">Instrumentengrafiken</a></li>
+                        <li><a href="https://marcscheidegger.ch/lernen.html">Lernen</a></li>
+                    </ul>
+                </nav>
+            </div>
         </header>
 
         <!-- 1. Übeprogramm zusammenstellen -->
         <main id="setup" class="screen">
+            <div class="tool-head">
+                <span class="kicker">Übe-Tool</span>
+                <h1>Übe-Timer</h1>
+            </div>
             <section class="panel">
                 <h2>Dein Übeprogramm</h2>
                 <p class="hint">Füge Timer hinzu, gib jedem ein Thema und eine Dauer. Beim Start laufen sie nacheinander ab.</p>
@@ -84,11 +101,16 @@
             </section>
         </main>
 
-        <!-- Nachweis, nur in der eingebetteten Ansicht (?embed) sichtbar -->
-        <footer class="credit">
-            Übe-Timer von <a href="https://marcscheidegger.ch" target="_blank" rel="noopener">Marc Scheidegger</a>,
+        <!-- Gemeinsame Fusszeile aller Übe-Tools (Aussehen in marke.css).
+             In der eingebetteten Ansicht (?embed) bleibt sie als Nachweis sichtbar. -->
+        <footer class="ms-foot">
+            <p>Übe-Timer von <a href="https://marcscheidegger.ch/" target="_blank" rel="noopener">Marc Scheidegger</a>,
             entwickelt mit Claude (Anthropic) ·
-            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a>
+            <a href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.de" target="_blank" rel="noopener license">CC BY-NC-SA 4.0</a></p>
+            <ul>
+                <li><a href="https://marcscheidegger.ch/impressum.html">Impressum</a></li>
+                <li><a href="https://marcscheidegger.ch/datenschutz.html">Datenschutz</a></li>
+            </ul>
         </footer>
 
         <template id="planItemTpl">
@@ -107,6 +129,6 @@
             </li>
         </template>
 
-        <script src="uebe.js?v=4"></script>
+        <script src="uebe.js?v=5"></script>
     </body>
 </html>

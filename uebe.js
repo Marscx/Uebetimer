@@ -455,7 +455,7 @@ function finishProgram() {
     clearInterval(loopId);
     session.endedAt = new Date();
     releaseWakeLock();
-    document.title = 'Übe-Timer';
+    document.title = 'Übe-Timer – Marc Scheidegger';
     applyColorMode();
     renderJournal();
     show('done');

@@ -1,0 +1,66 @@
+/* =============================================================================
+   marke.css – gemeinsamer Auftritt aller Übe-Tools von marcscheidegger.ch
+   =============================================================================
+   Diese Datei ist in jedem Tool identisch (Übe-Timer, Würfel, Instrumentengrafiken).
+   Bei Änderungen in allen Tools gleich übernehmen. Farben wie die Hauptseite
+   marcscheidegger.ch (css/site.css).
+
+   Enthält:
+     1. Markenfarben und Schrift (Variablen mit --ms-…)
+     2. Kopfleiste .ms-bar: Name links (→ Hauptseite), Tool-Navigation rechts
+     3. Fusszeile .ms-foot: Copyright, Lizenz, Impressum/Datenschutz
+   Alle Klassen beginnen mit "ms-", damit sie nicht mit dem Code der Tools kollidieren. */
+
+/* ---------- 1. Markenfarben und Schrift ---------- */
+:root {
+    --ms-navy: #0b1220;        /* Nachtblau der Hauptseite */
+    --ms-navy-2: #16213a;      /* etwas heller, für Hover */
+    --ms-line: #2a3a5e;        /* Linien auf Navy */
+    --ms-ink: #f5f7fb;         /* Text auf Navy */
+    --ms-muted: #a9b8d6;       /* gedämpfter Text auf Navy */
+    --ms-yellow: #f2b544;      /* Akzentgelb */
+    --ms-font: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+}
+
+/* ---------- 2. Kopfleiste ---------- */
+/* Immer Navy – in hellem wie dunklem Modus –, damit man sofort sieht: das gehört zu marcscheidegger.ch */
+.ms-bar {
+    background: var(--ms-navy);
+    color: var(--ms-ink);
+    font-family: var(--ms-font);
+    border-bottom: 1px solid var(--ms-line);
+}
+.ms-bar-inner {
+    max-width: 1120px; margin: 0 auto; padding: 0 16px; min-height: 60px;
+    display: flex; align-items: center; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap;
+}
+.ms-brand { color: var(--ms-ink); text-decoration: none; font-weight: 700; font-size: 1.05rem; white-space: nowrap; }
+.ms-brand span { color: var(--ms-yellow); }
+.ms-brand:hover { color: var(--ms-ink); }
+.ms-nav { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; }
+.ms-nav a {
+    display: block; padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+    color: var(--ms-muted); text-decoration: none; font-size: .92rem; font-weight: 500;
+}
+.ms-nav a:hover { color: var(--ms-ink); background: var(--ms-navy-2); }
+/* Das Tool, in dem man gerade ist */
+.ms-nav a[aria-current="page"] { color: var(--ms-ink); background: var(--ms-navy-2); box-shadow: inset 0 0 0 1px var(--ms-line); }
+
+/* Handy: Navigation in eigener Zeile unter dem Namen, seitlich wischbar statt umbrechen */
+@media (max-width: 640px) {
+    .ms-bar-inner { padding-block: 10px; }
+    .ms-bar nav { width: 100%; min-width: 0; }   /* Navigation auf Bildschirmbreite begrenzen */
+    .ms-nav { overflow-x: auto; scrollbar-width: none; }
+    .ms-nav::-webkit-scrollbar { display: none; }
+    .ms-nav a { padding: 6px 10px; font-size: .88rem; }
+}
+
+/* ---------- 3. Fusszeile ---------- */
+.ms-foot {
+    font-family: var(--ms-font);
+    max-width: 1120px; margin: 0 auto; padding: 28px 16px 36px;
+    display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between;
+    font-size: .85rem; color: var(--ms-foot-color, currentColor); opacity: .75;
+}
+.ms-foot a { color: inherit; }
+.ms-foot ul { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: 0; padding: 0; list-style: none; }

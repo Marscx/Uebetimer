@@ -1,27 +1,30 @@
-/* Übe-Timer – visueller Timer mit schrumpfender Farbscheibe */
+/* Übe-Timer – visueller Timer mit schrumpfender Farbscheibe
+   Kopfleiste, Fusszeile und Markenfarben kommen aus marke.css. */
 
+/* Hell: helles Blaugrau, Text in Nachtblau (passend zu marcscheidegger.ch) */
 :root {
-    --bg: #ecebe6;
+    --bg: #eef1f7;
     --panel: #ffffff;
-    --ink: #1d1d1f;
-    --muted: #6b6b70;
-    --line: #dddcd6;
+    --ink: #0b1220;
+    --muted: #5a6785;
+    --line: #dbe1ee;
     --red: #d8262c;
     --accent: #d8262c;      /* gewählte Timerfarbe, per JS gesetzt */
     --accent-ink: #ffffff;  /* Textfarbe auf --accent */
     --housing: #f8f7f3;
     --face: #ffffff;
-    --field: #f6f5f1;
+    --field: #f1f4f9;
 }
 
+/* Dunkel: Nachtblau wie die Hauptseite */
 @media (prefers-color-scheme: dark) {
     :root {
-        --bg: #1b1b1d;
-        --panel: #26262a;
-        --ink: #f2f2f0;
-        --muted: #a0a0a6;
-        --line: #3a3a40;
-        --field: #1f1f22;
+        --bg: #0b1220;
+        --panel: #16213a;
+        --ink: #f5f7fb;
+        --muted: #a9b8d6;
+        --line: #2a3a5e;
+        --field: #111a2e;
     }
 }
 
@@ -29,23 +32,18 @@
 :root.embed {
     --bg: transparent;
     --panel: #ffffff;
-    --ink: #1d1d1f;
-    --muted: #6b6b70;
-    --line: #dddcd6;
-    --field: #f6f5f1;
+    --ink: #0b1220;
+    --muted: #5a6785;
+    --line: #dbe1ee;
+    --field: #f1f4f9;
 }
-.embed .topbar { display: none; }
+.embed .ms-bar, .embed .tool-head, .embed .ms-foot ul { display: none; }
 .embed .screen { padding-top: 8px; padding-bottom: 8px; }
+.embed .ms-foot { justify-content: center; text-align: center; padding: 4px 16px 16px; }
 
-.credit { display: none; }
-.embed .credit {
-    display: block;
-    text-align: center;
-    padding: 4px 16px 16px;
-    font-size: .8rem;
-    color: var(--muted);
-}
-.credit a { color: inherit; }
+/* Fusszeile aus marke.css in der Textfarbe des Timers */
+.ms-foot { --ms-foot-color: var(--muted); opacity: 1; }
+.ms-foot p { margin: 0; }
 
 * { box-sizing: border-box; }
 
@@ -53,24 +51,19 @@ body {
     margin: 0;
     background: var(--bg);
     color: var(--ink);
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: var(--ms-font);
     line-height: 1.4;
 }
 
 [hidden] { display: none !important; }
 
-/* ---------- Kopfzeile ---------- */
-.topbar {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 12px 16px;
-    background: var(--ink);
-    color: var(--bg);
+/* ---------- Titel des Tools (wie die Seitenköpfe der Hauptseite) ---------- */
+.tool-head { margin: 8px 0 20px; }
+.kicker {
+    display: block; font-size: .78rem; font-weight: 600; letter-spacing: .28em;
+    text-transform: uppercase; color: var(--muted); margin-bottom: 6px;
 }
-.topbar a { color: inherit; opacity: .75; text-decoration: none; font-size: .9rem; }
-.topbar a:hover { opacity: 1; }
-.topbar h1 { margin: 0; font-size: 1.1rem; font-weight: 700; letter-spacing: .02em; }
+.tool-head h1 { margin: 0; font-size: clamp(2rem, 6vw, 2.8rem); line-height: 1.1; letter-spacing: -.01em; }
 
 .screen { max-width: 760px; margin: 0 auto; padding: 24px 16px 48px; }
 
@@ -148,8 +141,8 @@ body {
 .toggle input { accent-color: var(--accent); }
 
 @media (max-width: 560px) {
-    .plan-item { grid-template-columns: 44px 1fr auto; }
-    .plan-item .topic { grid-column: 2 / 4; }
+    .plan-item { grid-template-columns: 44px minmax(0, 1fr) auto; }
+    .plan-item .topic { grid-column: 2 / 4; width: 100%; }
     .plan-item .duration { grid-column: 2; }
     .plan-item .item-actions { grid-column: 3; }
     .plan-item .dial.mini { grid-row: 1 / 3; }

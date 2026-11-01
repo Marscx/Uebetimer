@@ -10,12 +10,16 @@ Multi-Timer für Übeprogramme: visueller Timer mit schrumpfender Farbscheibe.
 - Am Schluss: Journal mit Notizen pro Übung als Textdatei herunterladen
 - Das Programm wird im Browser gespeichert (localStorage)
 
-Reines HTML/CSS/JS, keine Abhängigkeiten. Bei Änderungen an `uebe.js` / `uebe.css`
+Reines HTML/CSS/JS, keine Abhängigkeiten. Bei Änderungen an `uebe.js` / `uebe.css` / `marke.css`
 die Versionsnummer `?v=N` in `index.html` erhöhen.
+
+Gemeinsamer Auftritt mit [marcscheidegger.ch](https://marcscheidegger.ch): `marke.css` enthält
+Kopfleiste (Navigation zwischen den Übe-Tools), Fusszeile und Markenfarben. Die Datei ist in allen
+Übe-Tools identisch – Änderungen überall gleich übernehmen.
 
 ## Einbetten (z.B. WordPress)
 
-Mit `?embed` erscheint der Timer ohne Kopfzeile, mit transparentem Hintergrund und immer hell:
+Mit `?embed` erscheint der Timer ohne Kopfleiste und Titel, mit transparentem Hintergrund und immer hell:
 
 ```html
 <iframe src="https://uebetimer.marcscheidegger.ch/?embed" title="Übe-Timer" allow="screen-wake-lock; autoplay" loading="lazy" style="width:100%;height:950px;border:0;"></iframe>
