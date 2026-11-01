@@ -1,0 +1,19 @@
+# Zwischenspeicher (Cache) im Browser
+# HTML-Seiten immer beim Server nachfragen, ob es eine neue Version gibt –
+# sonst sehen Besucher nach einem Update tagelang die alte Seite.
+# CSS, JS und Bilder dürfen lange gespeichert werden; bei Änderungen sorgt ?v=N
+# in index.html dafür, dass die neue Datei geladen wird.
+<IfModule mod_headers.c>
+<FilesMatch "\.html?$">
+Header set Cache-Control "no-cache"
+</FilesMatch>
+</IfModule>
+<IfModule mod_expires.c>
+ExpiresActive On
+ExpiresByType text/css "access plus 1 year"
+ExpiresByType application/javascript "access plus 1 year"
+ExpiresByType text/javascript "access plus 1 year"
+ExpiresByType image/svg+xml "access plus 1 month"
+ExpiresByType image/png "access plus 1 month"
+ExpiresByType image/jpeg "access plus 1 month"
+</IfModule>
