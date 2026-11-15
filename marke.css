@@ -81,7 +81,8 @@
     font-family: "Marc Versalien", var(--ms-schreib); font-size: 1.6rem; font-weight: 400;
 }
 .ms-brand:hover { color: var(--ms-ink); }
-.ms-brand > span { display: inline-block; text-transform: uppercase; font-size: .72em; letter-spacing: .02em; }
+/* top: .16em – die grossen Anfangsbuchstaben ragen nach oben; so liegt der Schriftzug optisch mittig zum Knopf */
+.ms-brand > span { position: relative; top: .16em; display: inline-block; text-transform: uppercase; font-size: .72em; letter-spacing: .02em; }
 .ms-brand > span::first-letter { font-size: 1.4em; }
 .ms-brand > span + span { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
 
