@@ -91,7 +91,7 @@
 .ms-brand > span + span { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
 
 /* Logo-Zeichen: ein Plattenspieler von oben, nur mit CSS gezeichnet.
-   Eckiges Gehäuse (Rahmen), darauf
+   Ohne Gehäuse-Rahmen:
    ::before = Schallplatte: Rillen, Lichtreflex, Etikett in der Akzentfarbe, Mittelstift
    ::after  = Tonarm mit Drehpunkt und Tonabnehmer
    Beim Darüberfahren schwenkt der Tonarm auf die Platte und sie dreht sich mit 33⅓ U/min
@@ -99,10 +99,9 @@
 .ms-knopf {
     position: relative; display: inline-block; flex: none; box-sizing: border-box;
     width: 32px; height: 32px; margin-right: 9px;
-    border: 1.5px solid rgb(255 255 255 / .85);
 }
 .ms-knopf::before {
-    content: ""; position: absolute; left: 2px; top: 3.5px; width: 22px; height: 22px; border-radius: 50%;
+    content: ""; position: absolute; left: 2px; top: 5px; width: 24px; height: 24px; border-radius: 50%;
     background:
         radial-gradient(circle, #f5f7fb 0 .9px, transparent 1.3px),                                  /* Mittelstift */
         radial-gradient(circle, var(--ms-akzent) 0 4px, transparent 4.4px),                                    /* Etikett */
