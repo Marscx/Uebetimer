@@ -1,25 +1,46 @@
 /* =============================================================================
    marke.css – gemeinsamer Auftritt aller Übe-Tools von marcscheidegger.ch
    =============================================================================
-   Diese Datei ist in jedem Tool identisch (Übe-Timer, Würfel, Instrumentengrafiken).
-   Bei Änderungen in allen Tools gleich übernehmen. Farben wie die Hauptseite
-   marcscheidegger.ch (css/site.css).
+   Diese Datei ist in jedem Tool identisch (Übe-Timer, Würfel, Instrumentengrafiken,
+   Anleitungen). Bei Änderungen in allen Tools gleich übernehmen. Design wie die
+   Hauptseite marcscheidegger.ch: Nachtblau, Akzent Koralle, eckig, Logo in Marcs
+   Handschrift mit Verstärker-Knopf.
 
    Enthält:
-     1. Markenfarben und Schrift (Variablen mit --ms-…)
-     2. Kopfleiste .ms-bar: Name links (→ Hauptseite), Tool-Navigation rechts
-     3. Fusszeile .ms-foot: Copyright, Lizenz, Impressum/Datenschutz
-   Alle Klassen beginnen mit "ms-", damit sie nicht mit dem Code der Tools kollidieren. */
+     1. Markenfarben und Schriften (Variablen mit --ms-…), Logo-Schrift
+     2. Kopfleiste .ms-bar: Logo links (→ Hauptseite), Tool-Navigation rechts
+     3. Logo: Verstärker-Knopf (.ms-knopf) + MARC SCHEIDEGGER in Handschrift
+     4. Fusszeile .ms-foot: Copyright, Lizenz, Impressum/Datenschutz
+   Alle Klassen beginnen mit "ms-", damit sie nicht mit dem Code der Tools kollidieren.
 
-/* ---------- 1. Markenfarben und Schrift ---------- */
+   Logo im HTML (in jedem Tool gleich):
+     <a class="ms-brand" href="…" aria-label="Marc Scheidegger – Startseite">
+       <b class="ms-knopf" aria-hidden="true"></b><span>Marc</span> <span>Scheidegger</span></a> */
+
+/* ---------- 1. Markenfarben und Schriften ---------- */
 :root {
     --ms-navy: #0b1220;        /* Nachtblau der Hauptseite */
     --ms-navy-2: #16213a;      /* etwas heller, für Hover */
     --ms-line: #2a3a5e;        /* Linien auf Navy */
     --ms-ink: #f5f7fb;         /* Text auf Navy */
     --ms-muted: #a9b8d6;       /* gedämpfter Text auf Navy */
-    --ms-yellow: #f2b544;      /* Akzentgelb */
-    --ms-font: "Avenir Next", "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    --ms-akzent: #ff6b5b;      /* Akzentfarbe Koralle (Buttons, aktive Elemente) */
+    --ms-akzent-2: #ff8273;    /* etwas heller, für Hover */
+    --ms-akzent-ink: #2a0904;  /* Text auf Koralle */
+    --ms-yellow: var(--ms-akzent);   /* alter Name, damit bestehender Tool-Code die neue Farbe bekommt */
+    --ms-font: "Avenir Next", ui-sans-serif, system-ui, "Segoe UI", "Helvetica Neue", Arial, sans-serif;
+    /* Schreibmaschine für kleine Beschriftungen (Systemschriften, nichts wird geladen) */
+    --ms-schreib: "American Typewriter", "Courier Prime", "Courier New", ui-monospace, monospace;
+}
+
+/* Marcs Handschrift für das Logo. Nur die Grossbuchstaben des Namens (A C D E G H I M R S)
+   und das Leerzeichen sind in der Datei – alles andere wurde entfernt, damit sich keine
+   Unterschrift nachbauen lässt. Liegt auf dem eigenen Server (keine fremden Dienste). */
+@font-face {
+    font-family: "Marc Versalien";
+    src: url("fonts/marc-versalien.ttf") format("truetype");
+    unicode-range: U+0020, U+0041, U+0043-0045, U+0047-0049, U+004D, U+0052-0053;
+    font-display: swap;
 }
 
 /* ---------- 2. Kopfleiste ---------- */
@@ -31,22 +52,19 @@
     border-bottom: 1px solid var(--ms-line);
 }
 .ms-bar-inner {
-    max-width: 1120px; margin: 0 auto; padding: 0 16px; min-height: 60px;
+    max-width: 1120px; margin: 0 auto; padding: 0 16px; min-height: 64px;
     display: flex; align-items: center; justify-content: space-between; gap: 8px 20px; flex-wrap: wrap;
 }
-.ms-brand { color: var(--ms-ink); text-decoration: none; font-weight: 700; font-size: 1.05rem; white-space: nowrap; }
-.ms-brand span { color: var(--ms-yellow); }
-.ms-brand:hover { color: var(--ms-ink); }
 .ms-nav { display: flex; gap: 4px; margin: 0; padding: 0; list-style: none; }
 .ms-nav a {
-    display: block; padding: 7px 12px; border-radius: 999px; white-space: nowrap;
+    display: block; padding: 7px 12px; white-space: nowrap;
     color: var(--ms-muted); text-decoration: none; font-size: .92rem; font-weight: 500;
 }
 .ms-nav a:hover { color: var(--ms-ink); background: var(--ms-navy-2); }
-/* Das Tool, in dem man gerade ist */
-.ms-nav a[aria-current="page"] { color: var(--ms-ink); background: var(--ms-navy-2); box-shadow: inset 0 0 0 1px var(--ms-line); }
+/* Das Tool, in dem man gerade ist: Koralle wie der aktive Menüpunkt der Hauptseite */
+.ms-nav a[aria-current="page"] { color: var(--ms-akzent-ink); background: var(--ms-akzent); }
 
-/* Handy: Navigation in eigener Zeile unter dem Namen, seitlich wischbar statt umbrechen */
+/* Handy: Navigation in eigener Zeile unter dem Logo, seitlich wischbar statt umbrechen */
 @media (max-width: 640px) {
     .ms-bar-inner { padding-block: 10px; }
     .ms-bar nav { width: 100%; min-width: 0; }   /* Navigation auf Bildschirmbreite begrenzen */
@@ -55,7 +73,43 @@
     .ms-nav a { padding: 6px 10px; font-size: .88rem; }
 }
 
-/* ---------- 3. Fusszeile ---------- */
+/* ---------- 3. Logo ---------- */
+/* MARC SCHEIDEGGER in Handschrift, nur Grossbuchstaben, Anfangsbuchstaben grösser */
+.ms-brand {
+    display: inline-flex; align-items: center; white-space: nowrap;
+    color: var(--ms-ink); text-decoration: none; line-height: 1;
+    font-family: "Marc Versalien", var(--ms-schreib); font-size: 1.6rem; font-weight: 400;
+}
+.ms-brand:hover { color: var(--ms-ink); }
+.ms-brand > span { display: inline-block; text-transform: uppercase; font-size: .72em; letter-spacing: .02em; }
+.ms-brand > span::first-letter { font-size: 1.4em; }
+.ms-brand > span + span { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
+
+/* Verstärker-Knopf (Poti), nur mit CSS gezeichnet:
+   ::before = Skala (11 Striche im Bogen, unten offen), ::after = Knopf mit Zeiger in Koralle */
+.ms-knopf { position: relative; display: inline-block; flex: none; width: 32px; height: 32px; margin-right: 8px; }
+.ms-knopf::before {
+    content: ""; position: absolute; inset: 0; border-radius: 50%;
+    background: repeating-conic-gradient(from -152deg, rgb(255 255 255 / .8) 0 4deg, transparent 4deg 30deg);
+    /* sichtbar bleibt nur ein schmaler Ring aussen und nur der Bogen von -150° bis +150° */
+    -webkit-mask: radial-gradient(closest-side, transparent 74%, #000 75%), conic-gradient(from -152deg, #000 304deg, transparent 0);
+    -webkit-mask-composite: source-in;
+            mask: radial-gradient(closest-side, transparent 74%, #000 75%), conic-gradient(from -152deg, #000 304deg, transparent 0);
+            mask-composite: intersect;
+}
+.ms-knopf::after {
+    content: ""; position: absolute; inset: 7px; border-radius: 50%; border: 2px solid rgb(255 255 255 / .9);
+    background:
+        linear-gradient(var(--ms-akzent), var(--ms-akzent)) 50% 1px / 2.5px 6px no-repeat,   /* Zeiger */
+        radial-gradient(circle at 35% 30%, #2a3a5e, #111a2e);                                   /* Knopf */
+    transform: rotate(120deg);                                                                  /* auf "10" */
+    transition: transform .4s cubic-bezier(.3, 1.6, .5, 1);
+}
+.ms-brand:hover .ms-knopf::after { transform: rotate(150deg); }   /* dreht beim Darüberfahren auf Anschlag */
+@media (max-width: 640px) { .ms-brand { font-size: 1.35rem; } }
+@media (prefers-reduced-motion: reduce) { .ms-knopf::after { transition: none; } }
+
+/* ---------- 4. Fusszeile ---------- */
 .ms-foot {
     font-family: var(--ms-font);
     max-width: 1120px; margin: 0 auto; padding: 28px 16px 36px;
