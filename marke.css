@@ -84,6 +84,10 @@
 /* top: .16em – die grossen Anfangsbuchstaben ragen nach oben; so liegt der Schriftzug optisch mittig zum Knopf */
 .ms-brand > span { position: relative; top: .16em; display: inline-block; text-transform: uppercase; font-size: .72em; letter-spacing: .02em; }
 .ms-brand > span::first-letter { font-size: 1.4em; }
+/* Die Initialen der Handschrift enden über der Grundlinie (M wenig, S deutlich) –
+   so abgesenkt stehen sie auf derselben Linie wie die übrigen Buchstaben */
+.ms-brand > span:first-of-type::first-letter { vertical-align: -.05em; }
+.ms-brand > span + span::first-letter { vertical-align: -.12em; }
 .ms-brand > span + span { margin-left: .3em; }   /* das Leerzeichen der Handschrift ist sehr schmal */
 
 /* Verstärker-Knopf (Poti), nur mit CSS gezeichnet:
