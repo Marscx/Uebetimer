@@ -281,3 +281,23 @@ textarea {
 }
 textarea:focus { outline: none; border-color: var(--accent); }
 .notes-label { display: block; font-weight: 600; margin-bottom: 6px; }
+
+/* ---------- Übemappe ---------- */
+.mappe { margin-top: 20px; }
+.mappe-name { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px; font-weight: 600; }
+.mappe-name span { color: var(--muted); font-weight: 400; }
+.mappe-name input {
+    flex: 1 1 200px; max-width: 320px; font: inherit; font-weight: 400; color: var(--ink);
+    background: var(--field); border: 1px solid transparent; border-radius: 0; padding: 8px 10px;
+}
+.mappe-name input:focus { outline: none; border-color: var(--accent); }
+.mappe-status { color: var(--muted); font-size: .92rem; margin: 12px 0 0; }
+.mappe-knoepfe { justify-content: flex-start; }
+.mappe-knoepfe label.btn { cursor: pointer; }
+.mappe-meldung { font-size: .9rem; margin: 10px 0 0; min-height: 1.2em; }
+.mappe-journal { margin-top: 16px; border-top: 1px solid var(--line); }
+.mappe-eintrag { padding: 14px 0 4px; border-bottom: 1px solid var(--line); }
+.mappe-eintrag h3 { margin: 0; font-size: 1rem; font-weight: 700; }
+.mappe-eintrag .journal { margin: 6px 0 8px; }
+.mappe-eintrag .journal li { padding: 6px 0; }
+.j-notiz { margin: 4px 0 0; color: var(--muted); font-size: .9rem; white-space: pre-wrap; }

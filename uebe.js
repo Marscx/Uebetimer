@@ -85,6 +85,45 @@ function loadPlan() {
 
 function savePlan() {
     try { localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); } catch (e) { /* egal */ }
+    planInMappe();
+}
+
+// ---------- Übemappe (Datei-Format: mappe.js, MAPPE.md) ----------
+// Übeprogramm und Journal kommen in den Teil "uebetimer" der Übemappe. Die Mappe wird im
+// Browser gemerkt und lässt sich als Datei speichern, teilen und wieder öffnen.
+
+let mappe = Mappe.laden();
+
+function timerTeil() {
+    const t = Mappe.teil(mappe, 'uebetimer', () => ({ version: 1, plan: [], journal: [] }));
+    if (!Array.isArray(t.plan)) t.plan = [];
+    if (!Array.isArray(t.journal)) t.journal = [];
+    return t;
+}
+
+function planInMappe() {
+    timerTeil().plan = plan.map((p) => ({ thema: p.topic, sekunden: p.sec }));
+    Mappe.merken(mappe);
+}
+
+const iso = (d) => (d ? new Date(d).toISOString() : null);
+
+// Eine beendete Übesession als Journal-Eintrag der Mappe
+function sessionEintrag(s) {
+    return {
+        start: iso(s.startedAt),
+        ende: iso(s.endedAt),
+        notizen: $('#generalNotes').value.trim(),
+        uebungen: s.items.map((it) => ({
+            thema: it.topic,
+            geplant: Math.round(it.planned),
+            geuebt: Math.round(it.actual),
+            start: iso(it.start),
+            ende: iso(it.end),
+            status: it.status,
+            notiz: (it.note || '').trim(),
+        })),
+    };
 }
 
 // ---------- Farben ----------
@@ -458,7 +497,22 @@ function finishProgram() {
     document.title = 'Übe-Timer – Marc Scheidegger';
     applyColorMode();
     renderJournal();
+    // Session ins Journal der Mappe; Notizen werden laufend nachgetragen
+    const journal = timerTeil().journal;
+    session.mappeIndex = journal.length;
+    journal.push(sessionEintrag(session));
+    Mappe.merken(mappe);
+    mappeAnzeigen();
     show('done');
+}
+
+// Notizen nach dem Üben in den Mappen-Eintrag übernehmen
+function eintragAktualisieren() {
+    if (!session || session.mappeIndex === undefined) return;
+    const journal = timerTeil().journal;
+    if (!journal[session.mappeIndex]) return;
+    journal[session.mappeIndex] = sessionEintrag(session);
+    Mappe.merken(mappe);
 }
 
 $('#startBtn').addEventListener('click', startProgram);
@@ -523,7 +577,7 @@ function renderJournal() {
         const note = document.createElement('textarea');
         note.rows = 2;
         note.placeholder = 'Notiz zu dieser Übung (Tempo, Fortschritt, Probleme …)';
-        note.addEventListener('input', () => { it.note = note.value; });
+        note.addEventListener('input', () => { it.note = note.value; eintragAktualisieren(); });
 
         li.append(row, note);
         list.append(li);
@@ -582,7 +636,144 @@ $('#backBtn').addEventListener('click', () => {
     show('setup');
 });
 
+$('#generalNotes').addEventListener('input', eintragAktualisieren);
+
+// ---------- Übemappe: Anzeige und Knöpfe ----------
+
+const fmtTag = (d) => new Date(d).toLocaleDateString('de-CH', { weekday: 'short', day: 'numeric', month: 'short', year: 'numeric' });
+
+function mappeAnzeigen() {
+    const journal = timerTeil().journal;
+    $('#mappeName').value = mappe.name || '';
+    const letzte = journal[journal.length - 1];
+    $('#mappeStatus').textContent = journal.length
+        ? `${journal.length} ${journal.length === 1 ? 'Eintrag' : 'Einträge'} im Journal · zuletzt geübt am ${fmtTag(letzte.start)}`
+        : 'Noch keine Einträge – nach dem Üben kommt jede Session automatisch ins Journal.';
+    $('#mappeJournalBtn').hidden = !journal.length;
+    if (!$('#mappeJournal').hidden) journalListe();
+}
+
+// Alle Sessions der Mappe, neueste zuerst
+function journalListe() {
+    const box = $('#mappeJournal');
+    box.textContent = '';
+    const journal = timerTeil().journal.slice().reverse();
+    for (const e of journal) {
+        const sec = document.createElement('section');
+        sec.className = 'mappe-eintrag';
+        const kopf = document.createElement('h3');
+        const geuebt = e.uebungen.reduce((sum, u) => sum + (u.geuebt || 0), 0);
+        const geplant = e.uebungen.reduce((sum, u) => sum + (u.geplant || 0), 0);
+        kopf.textContent = `${fmtTag(e.start)}, ${fmtClock(new Date(e.start))}–${e.ende ? fmtClock(new Date(e.ende)) : '?'}`;
+        const sub = document.createElement('p');
+        sub.className = 'j-meta';
+        sub.textContent = `geübt ${fmt(geuebt)} von ${fmt(geplant)}`;
+        const ol = document.createElement('ol');
+        ol.className = 'journal';
+        for (const u of e.uebungen) {
+            const li = document.createElement('li');
+            const row = document.createElement('div');
+            row.className = 'row';
+            const topic = document.createElement('span');
+            topic.className = 'j-topic';
+            topic.textContent = u.thema;
+            const meta = document.createElement('span');
+            meta.className = 'j-meta';
+            meta.textContent = `${fmt(u.geuebt)} / ${fmt(u.geplant)}`;
+            const badge = document.createElement('span');
+            badge.className = 'badge' + (u.status === 'erledigt' ? ' ok' : '');
+            badge.textContent = u.status;
+            row.append(topic, meta, badge);
+            li.append(row);
+            if (u.notiz) {
+                const n = document.createElement('p');
+                n.className = 'j-notiz';
+                n.textContent = u.notiz;
+                li.append(n);
+            }
+            ol.append(li);
+        }
+        sec.append(kopf, sub, ol);
+        if (e.notizen) {
+            const n = document.createElement('p');
+            n.className = 'j-notiz';
+            n.textContent = e.notizen;
+            sec.append(n);
+        }
+        box.append(sec);
+    }
+}
+
+// Teilen (iPad/Handy) bzw. herunterladen (Computer)
+const teilenMoeglich = Mappe.kannTeilen();
+function mappeWeitergeben(knopf) {
+    if (session && session.mappeIndex !== undefined) eintragAktualisieren();
+    if (teilenMoeglich) {
+        Mappe.teilen(mappe);
+    } else {
+        Mappe.herunterladen(mappe);
+        if (knopf) {
+            const alt = knopf.textContent;
+            knopf.textContent = 'Gespeichert ✓';
+            setTimeout(() => { knopf.textContent = alt; }, 1800);
+        }
+    }
+}
+for (const id of ['#mappeTeilenBtn', '#doneMappeBtn']) {
+    $(id).textContent = teilenMoeglich ? '↗ Mappe teilen' : '⬇ Mappe speichern';
+    $(id).addEventListener('click', (e) => mappeWeitergeben(e.currentTarget));
+}
+
+$('#mappeName').addEventListener('input', (e) => {
+    mappe.name = e.target.value.trim();
+    Mappe.merken(mappe);
+});
+
+$('#mappeJournalBtn').addEventListener('click', (e) => {
+    const box = $('#mappeJournal');
+    box.hidden = !box.hidden;
+    e.currentTarget.setAttribute('aria-expanded', String(!box.hidden));
+    e.currentTarget.textContent = box.hidden ? 'Journal ansehen' : 'Journal ausblenden';
+    if (!box.hidden) journalListe();
+});
+
+// Mappe öffnen: ersetzt die Mappe im Browser und übernimmt das Übeprogramm daraus
+$('#mappeDatei').addEventListener('change', (e) => {
+    const datei = e.target.files[0];
+    e.target.value = '';
+    if (!datei) return;
+    Mappe.oeffnen(datei).then((m) => {
+        const bisher = timerTeil().journal.length;
+        if (bisher && !confirm(`Die geöffnete Mappe ersetzt die aktuelle (${bisher} ${bisher === 1 ? 'Eintrag' : 'Einträge'} im Journal). Weiter?`)) return;
+        mappe = m;
+        const t = timerTeil();
+        if (t.plan.length) {
+            plan = t.plan.map((p) => ({ id: uid(), topic: String(p.thema || ''), sec: Math.max(0, Math.round(Number(p.sekunden) || 0)) }));
+            try { localStorage.setItem(PLAN_KEY, JSON.stringify(plan)); } catch (err) { /* egal */ }
+            renderPlan();
+        } else {
+            planInMappe();   // Mappe ohne Übeprogramm: das aktuelle übernehmen
+        }
+        Mappe.merken(mappe);
+        mappeAnzeigen();
+        $('#mappeMeldung').textContent = `Mappe${mappe.name ? ' von ' + mappe.name : ''} geöffnet – ${t.journal.length} ${t.journal.length === 1 ? 'Eintrag' : 'Einträge'} im Journal.`;
+    }).catch((err) => {
+        $('#mappeMeldung').textContent = err.message;
+    });
+});
+
+$('#mappeNeuBtn').addEventListener('click', () => {
+    const bisher = timerTeil().journal.length;
+    if (bisher && !confirm('Neue, leere Mappe beginnen? Das Journal der aktuellen Mappe wird aus diesem Browser entfernt – speichere oder teile sie vorher, wenn du sie behalten willst.')) return;
+    mappe = Mappe.neu();
+    planInMappe();
+    mappeAnzeigen();
+    $('#mappeMeldung').textContent = 'Neue Mappe begonnen.';
+});
+
 // ---------- Start ----------
 
 applyColorMode();
 renderPlan();
+planInMappe();
+mappeAnzeigen();

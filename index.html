@@ -9,7 +9,7 @@
         <link rel="icon" href="favicon.svg" type="image/svg+xml">
         <meta name="theme-color" content="#0b1220">
         <link rel="stylesheet" href="marke.css?v=7">
-        <link rel="stylesheet" href="uebe.css?v=8">
+        <link rel="stylesheet" href="uebe.css?v=9">
         <script>
             // ?embed: Ansicht für iFrames (ohne Kopfzeile, transparenter Hintergrund)
             if (new URLSearchParams(location.search).has('embed')) document.documentElement.classList.add('embed');
@@ -57,6 +57,25 @@
                 </div>
                 <button id="startBtn" class="btn btn-primary btn-big" type="button">▶ Übeprogramm starten</button>
             </section>
+
+            <!-- Übemappe: Übeprogramm und Journal als Datei (mappe.js, Beschreibung in MAPPE.md) -->
+            <section class="panel mappe" id="mappePanel">
+                <h2>Übemappe</h2>
+                <p class="hint">Deine Übemappe hält Übeprogramm und Journal fest. Teile sie mit deiner Lehrperson oder öffne sie später wieder, um am selben Ort weiterzumachen. Gespeichert wird nur auf deinem Gerät, nicht im Internet.</p>
+                <label class="mappe-name">Name <span>(freiwillig)</span>
+                    <input id="mappeName" type="text" maxlength="40" placeholder="z. B. Vorname" autocomplete="off">
+                </label>
+                <p id="mappeStatus" class="mappe-status"></p>
+                <div class="controls mappe-knoepfe">
+                    <button id="mappeTeilenBtn" class="btn btn-primary" type="button">↗ Mappe teilen</button>
+                    <label class="btn" for="mappeDatei">📂 Mappe öffnen</label>
+                    <input id="mappeDatei" type="file" accept=".json,application/json" hidden>
+                    <button id="mappeJournalBtn" class="btn btn-ghost" type="button" aria-expanded="false" aria-controls="mappeJournal">Journal ansehen</button>
+                    <button id="mappeNeuBtn" class="btn btn-ghost" type="button">Neue Mappe</button>
+                </div>
+                <p id="mappeMeldung" class="mappe-meldung" role="status"></p>
+                <div id="mappeJournal" class="mappe-journal" hidden></div>
+            </section>
         </main>
 
         <!-- 2. Programm läuft -->
@@ -94,8 +113,10 @@
                 <ol id="doneList" class="journal"></ol>
                 <label class="notes-label" for="generalNotes">Allgemeine Notizen zur Übesession</label>
                 <textarea id="generalNotes" rows="4" placeholder="Wie lief es? Was nimmst du dir fürs nächste Mal vor?"></textarea>
+                <p class="hint">Diese Session ist schon in deiner Übemappe – Notizen werden automatisch übernommen.</p>
                 <div class="controls">
-                    <button id="downloadBtn" class="btn btn-primary" type="button">⬇ Journal herunterladen</button>
+                    <button id="doneMappeBtn" class="btn btn-primary" type="button">↗ Mappe teilen</button>
+                    <button id="downloadBtn" class="btn" type="button">⬇ Journal als Text</button>
                     <button id="backBtn" class="btn btn-ghost" type="button">Zurück zum Programm</button>
                 </div>
             </section>
@@ -129,6 +150,7 @@
             </li>
         </template>
 
-        <script src="uebe.js?v=5"></script>
+        <script src="mappe.js?v=1"></script>
+        <script src="uebe.js?v=6"></script>
     </body>
 </html>

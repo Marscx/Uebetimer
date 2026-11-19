@@ -8,6 +8,9 @@ Multi-Timer für Übeprogramme: visueller Timer mit schrumpfender Farbscheibe.
 - Timerfarbe wählbar: Rot, Grün, Hellblau, Orange, Gelb oder gemischt (zufällig pro Übung)
 - Die Skala der Uhr passt sich der Dauer an (5, 10, 20, 30, 60, 120 Min …)
 - Am Schluss: Journal mit Notizen pro Übung als Textdatei herunterladen
+- **Übemappe:** Übeprogramm und Journal (alle Sessions mit Zeitstempel und Notizen) als Datei
+  speichern, per WhatsApp/Mail teilen und später wieder öffnen – nichts wird auf dem Server gespeichert.
+  Format und Regeln: [MAPPE.md](MAPPE.md), Code: `mappe.js` (in allen Übe-Tools gleich)
 - Das Programm wird im Browser gespeichert (localStorage)
 
 Reines HTML/CSS/JS, keine Abhängigkeiten. Bei Änderungen an `uebe.js` / `uebe.css` / `marke.css`
