@@ -7,8 +7,9 @@ oder auf einem anderen Gerät am selben Ort weitermachen kann.
 - Gespeichert wird **nur in der Datei** und im Browser des Geräts (localStorage) –
   nichts auf dem Server, keine Konten, keine Datenbank.
 - Geteilt wird die Datei wie ein Foto: per WhatsApp, Mail, AirDrop oder in «Dateien».
-- Der Code dafür steht in `mappe.js` und ist in allen Tools gleich (wie `marke.css`).
-  Bei Änderungen in allen Tools ersetzen.
+- Der Code dafür steht in `mappe.js` und ist in allen Tools gleich (wie `marke.css`),
+  ebenso diese Beschreibung. Bei Änderungen in allen Tools ersetzen.
+- Tools mit Übemappe: Übe-Timer (`uebetimer`), Würfel (`wuerfel`).
 
 ## Aufbau (Version 1)
 
@@ -68,6 +69,24 @@ unbekannte – bleiben beim Speichern unverändert. So kann eine Mappe von Tool 
   übernommen – so kann die Lehrperson einen Plan vorbereiten und als Mappe schicken.
 - `journal`: alle Übesessions, älteste zuerst. `status` ist `erledigt`, `übersprungen`,
   `abgebrochen` oder `nicht geübt`; Zeiten in Sekunden.
+
+## Teil `wuerfel` (Version 1)
+
+```json
+{
+  "version": 1,
+  "lernstand": { "C": { "ja": 3, "nein": 1, "zuletzt": "ja" } },
+  "verlauf": [ { "zeit": "2026-11-19T14:20:00.000Z", "akkord": "Dm", "gewusst": false } ],
+  "caged": { "pentatonik": true, "leitGleit": false, "mollDurZahlen": false }
+}
+```
+
+- `lernstand`: pro Akkord der 1. Lage, wie oft gewusst / nicht gewusst und die letzte Antwort.
+  Gewusste Akkorde kommen im Würfel nicht mehr vor.
+- `verlauf`: jede Antwort mit Zeitstempel, älteste zuerst (höchstens 1000 Einträge).
+- `caged`: Anzeige-Einstellungen des CAGED-Würfels.
+- Wer eine Mappe öffnet, arbeitet mit deren Lernstand weiter – so können mehrere
+  Schüler/innen am selben iPad je ihre eigene Mappe öffnen.
 
 ## Weitere Tools
 
