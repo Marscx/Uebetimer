@@ -109,18 +109,30 @@ const Mappe = (() => {
         setTimeout(() => URL.revokeObjectURL(url), 1000);
     }
 
-    // … oder teilen (iPad / Handy: WhatsApp, Mail, Dateien). Gibt false zurück, wenn
-    // das Gerät keine Dateien teilen kann – dann wird stattdessen heruntergeladen.
+    // … oder teilen (iPad / Handy: WhatsApp, Mail, Dateien).
     function kannTeilen() {
         try {
             return !!(navigator.canShare && navigator.canShare({ files: [new File(['{}'], 'x.json', { type: 'application/json' })] }));
         } catch (e) { return false; }
     }
+    // Ergebnis: "geteilt", "abgebrochen" oder "heruntergeladen".
+    // Manche Browser (z. B. Chrome auf dem Mac) melden zwar, dass sie Dateien teilen können,
+    // lehnen eine .json-Datei beim Teilen dann aber ab – dann wird stattdessen heruntergeladen.
+    // Nur wenn man das Teilen-Fenster selbst schliesst (AbortError), passiert nichts.
     function teilen(m) {
-        if (!kannTeilen()) { herunterladen(m); return Promise.resolve(false); }
+        if (!kannTeilen()) { herunterladen(m); return Promise.resolve('heruntergeladen'); }
         const datei = alsDatei(m);
-        return navigator.share({ files: [datei], title: 'Übemappe' + (m.name ? ' ' + m.name : '') })
-            .then(() => true, () => false);   // abgebrochen: nichts tun
+        let versuch;
+        try {
+            versuch = navigator.share({ files: [datei], title: 'Übemappe' + (m.name ? ' ' + m.name : '') });
+        } catch (e) {
+            versuch = Promise.reject(e);
+        }
+        return versuch.then(() => 'geteilt', (e) => {
+            if (e && e.name === 'AbortError') return 'abgebrochen';
+            herunterladen(m);
+            return 'heruntergeladen';
+        });
     }
 
     return { neu, laden, merken, teil, oeffnen, herunterladen, teilen, kannTeilen, dateiname, VERSION };

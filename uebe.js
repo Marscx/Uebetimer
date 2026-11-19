@@ -708,15 +708,18 @@ function journalListe() {
 const teilenMoeglich = Mappe.kannTeilen();
 function mappeWeitergeben(knopf) {
     if (session && session.mappeIndex !== undefined) eintragAktualisieren();
+    const gespeichert = () => {
+        if (!knopf) return;
+        const alt = knopf.textContent;
+        knopf.textContent = 'Gespeichert ✓';
+        setTimeout(() => { knopf.textContent = alt; }, 1800);
+    };
     if (teilenMoeglich) {
-        Mappe.teilen(mappe);
+        // Kann der Browser die Datei doch nicht teilen, wird sie heruntergeladen
+        Mappe.teilen(mappe).then((r) => { if (r === 'heruntergeladen') gespeichert(); });
     } else {
         Mappe.herunterladen(mappe);
-        if (knopf) {
-            const alt = knopf.textContent;
-            knopf.textContent = 'Gespeichert ✓';
-            setTimeout(() => { knopf.textContent = alt; }, 1800);
-        }
+        gespeichert();
     }
 }
 for (const id of ['#mappeTeilenBtn', '#doneMappeBtn']) {
